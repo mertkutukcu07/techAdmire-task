@@ -2,9 +2,11 @@ import React from "react";
 import { loginController } from "@/app/hooks/formController";
 import LoginInputs from "./LoginInputs";
 import LoginButton from "./LoginButton";
-import LoginFooter from "../AuthFooter";
 import AuthHeader from "../AuthHeader";
 import AuthFooter from "../AuthFooter";
+import { navigation } from "@/app/hooks/navigation";
+import { RouteNames } from "@/app/enums/routeNames";
+import { useRouter } from "next/navigation";
 
 interface LoginProps {
   handleRegister: () => void;
@@ -16,6 +18,9 @@ const Login = ({ handleRegister }: LoginProps) => {
     email: "",
     password: "",
   });
+  const router = useRouter();
+  const { navigate } = navigation(router);
+
   const [loading, setLoading] = React.useState(false);
   const handleLogin = async () => {
     setLoading(true);
@@ -24,6 +29,8 @@ const Login = ({ handleRegister }: LoginProps) => {
       const result = await loginController(formData);
       if (result.error) {
         return;
+      } else {
+        navigate(RouteNames.Home);
       }
       setFormData({ email: "", password: "" });
     }, 1500);

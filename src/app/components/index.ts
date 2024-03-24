@@ -4,4 +4,6 @@ import Login from "./login";
 import Input from "./Input";
 import Button from "./Button";
 import Register from "./register";
-export { Header, Footer, Login, Input, Button, Register };
+import { Alert } from "./Alert";
+import Filtered from "../home/components/Filtered";
+export { Header, Footer, Login, Input, Button, Register, Alert, Filtered };

@@ -1,4 +1,4 @@
-import { Alert } from "../components/Alert";
+import { Alert } from "../components";
 import { AlertType } from "../enums/Alert";
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const loginController = (formData) => {
