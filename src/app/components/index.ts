@@ -3,4 +3,5 @@ import Footer from "./home/Footer";
 import Login from "./login";
 import Input from "./Input";
 import Button from "./Button";
-export { Header, Footer, Login, Input, Button };
+import Register from "./register";
+export { Header, Footer, Login, Input, Button, Register };
