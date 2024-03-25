@@ -2,12 +2,16 @@
 
 import React from "react";
 import { filteredController } from "../hooks/filteredController";
-import { ApplicationList } from "../mocks/ApplicationList";
-import { Button, Filtered } from "../components";
+import {
+  ApplicationList,
+  ApplicationListTypes,
+} from "../mocks/ApplicationList";
+import { Filtered } from "../components";
 import { sortedListDate, sortedListPrice } from "../mocks/SortBy";
 import SortBy from "./components/SortBy";
 import PriceFiltered from "./components/PriceFiltered";
 import ApplicationCard from "./components/ApplicationCard";
+import { filteredList, useFilteredList } from "../hooks/filteredList";
 
 const Home = () => {
   const [selectedCountry, setSelectedCountry] = React.useState<string[]>([]);
@@ -16,15 +20,28 @@ const Home = () => {
   );
   const [selectedDuration, setSelectedDuration] = React.useState<string[]>([]);
   const [selectedLanguage, setSelectedLanguage] = React.useState<string[]>([]);
-  const [priceSorted, setPriceSorted] = React.useState({
-    minPrice: "",
-    maxPrice: "",
-  });
-  const [selectedSorteds, setSelectedSorteds] = React.useState({
-    price: "",
-    date: "",
-  });
+  const [minPrice, setMinPrice] = React.useState("");
+  const [maxPrice, setMaxPrice] = React.useState("");
+  const [priceSorted, setPriceSorted] = React.useState<string>("");
+  const [dateSorted, setDateSorted] = React.useState<string>("");
+  const [applicationList, setApplicationList] =
+    React.useState<ApplicationListTypes[]>(ApplicationList);
 
+  const filteredList = useFilteredList(
+    ApplicationList,
+    selectedCountry,
+    selectedUniversity,
+    selectedDuration,
+    selectedLanguage,
+    minPrice,
+    maxPrice,
+    priceSorted,
+    dateSorted
+  );
+
+  const handleFilter = () => {
+    setApplicationList(filteredList);
+  };
   return (
     <div className="flex w-full h-screen items-center">
       <div className="w-64 h-screen bg-gray-200 rounded-lg bg-white  border border-gray-300 p-8 overflow-y-auto space-y-4">
@@ -33,7 +50,7 @@ const Home = () => {
             text: "Price",
             data: sortedListPrice,
             onChange: (e) => {
-              setSelectedSorteds({ ...selectedSorteds, price: e.target.value });
+              setPriceSorted(e.target.value);
             },
           }}
         />
@@ -42,11 +59,11 @@ const Home = () => {
             text: "Date",
             data: sortedListDate,
             onChange: (e) => {
-              setSelectedSorteds({ ...selectedSorteds, date: e.target.value });
+              setDateSorted(e.target.value);
             },
           }}
         />
-        <PriceFiltered {...{ priceSorted, setPriceSorted }} />
+        <PriceFiltered {...{ maxPrice, minPrice, setMaxPrice, setMinPrice }} />
         <Filtered
           key={`${selectedCountry}-${selectedUniversity}-${selectedLanguage}-country`}
           items={filteredController(ApplicationList).country}
@@ -75,12 +92,14 @@ const Home = () => {
           setSelectedItems={setSelectedLanguage}
           chapterName="Language"
         />
-        <button className="bg-common-primary text-white p-2 rounded-lg w-full">
-          Apply Now
+        <button
+          onClick={handleFilter}
+          className="bg-common-primary text-white p-2 rounded-lg w-full"
+        >
+          <text>Apply Now</text>
         </button>
       </div>
-
-      <ApplicationCard />
+      <ApplicationCard {...{ applicationList }} />
     </div>
   );
 };
