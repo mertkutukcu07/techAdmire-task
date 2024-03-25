@@ -22,16 +22,15 @@ const Login = ({ handleRegister }: LoginProps) => {
   const { navigate } = navigation(router);
 
   const [loading, setLoading] = React.useState(false);
-  const handleLogin = async () => {
+  const handleLogin = () => {
     setLoading(true);
     setTimeout(async () => {
       setLoading(false);
-      const result = await loginController(formData);
+      const result = loginController(formData);
       if (result.error) {
         return;
-      } else {
-        navigate(RouteNames.Home);
       }
+      navigate(RouteNames.Home);
       setFormData({ email: "", password: "" });
     }, 1500);
   };
